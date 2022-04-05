@@ -1,4 +1,20 @@
-MainWidget:
+BoxLayoutExample:
+
+
+<BoxLayoutExample>:
+    orientation: "vertical"
+    Button:
+        text: "A"
+        size: "200dp", "40dp"
+        #width: "200dp"                         # may be width and height separately
+        size_hint: None, None
+        pos_hint: { "center_x": .5 }            # can be "x" for left side of the button, "center_x" for center of the button, "right" for right side of the button
+                                                # can be "y" for bottom of the button, "center_y" for center of the button, "top" for top of the button
+    Button:
+        text: "B"
+        size_hint: 1, 2           # width, height in percent of default size
+    Button:
+        text: "C"
 
 
 <MainWidget>:
