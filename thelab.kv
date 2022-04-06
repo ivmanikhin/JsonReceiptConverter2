@@ -1,4 +1,23 @@
-BoxLayoutExample:
+WidgetsExample:
+
+<WidgetsExample>:
+
+    cols: 3
+
+    ToggleButton:
+        text: root.toggle_button_state
+        on_state: root.button_toggle(self)
+
+    Button:
+        text: "Click here"
+        font_name: "fonts/RAVIE.TTF"
+        on_press: root.button_change_label_text()
+
+    Label:
+        text: root.label_text
+        font_name: "fonts/RAVIE.TTF"
+        font_size: "80dp"
+
 
 
 <BoxLayoutExample>:

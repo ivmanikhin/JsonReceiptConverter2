@@ -1,11 +1,24 @@
 from kivy.app import App
+from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
 
 
-class BoxLayoutExample(BoxLayout):
-    pass
+class WidgetsExample(GridLayout):
+    count = 0
+    label_text = StringProperty("0")
+    toggle_button_state = StringProperty("0")
+
+    def button_toggle(self, widget):
+        self.toggle_button_state = str(widget.state)
+
+    def button_change_label_text(self):
+        self.count += 1
+        self.label_text = str(self.count)
+
+    # pass
     # def __init__(self, **kwargs):
     #     super().__init__(**kwargs)
     #     self.orientation = "vertical"
