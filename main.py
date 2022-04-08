@@ -1,12 +1,12 @@
 from kivy.app import App
-# from kivy.uix.boxlayout import BoxLayout
 # from kivy.uix.button import Button
 from kivy.properties import StringProperty
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
 
 
-class WidgetsExample(GridLayout):
+class WidgetsExample(BoxLayout):
     count = 0
     slider_value = 50
     # count_label_text = StringProperty(str(count))
@@ -25,14 +25,16 @@ class WidgetsExample(GridLayout):
         self.count += 1
         self.ids.counter_label.text = str(self.count)
 
-    def on_switch_active(self, widget):
-        print("Switch " + ("On" if widget.active else "Off"))
+    # def on_switch_active(self, widget):
+    #     self.ids.slider.disabled = not widget.active
+    #     print("Switch " + ("On" if widget.active else "Off"))
 
     def on_slider_value(self, widget):
         self.slider_value = int(widget.value)
         # self.slider_value_text = str(self.slider_value)
         # self.ids.slider_label.text = str(self.slider_value)
-
+    def on_text_validate(self, widget):
+        self.ids.text_input_label.text = widget.text
     # pass
     # def __init__(self, **kwargs):
     #     super().__init__(**kwargs)
