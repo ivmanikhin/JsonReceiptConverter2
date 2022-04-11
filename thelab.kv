@@ -58,9 +58,13 @@ WidgetsExample:
 #
     TextInput:
         id: text_input
-        text: "Something"
+        text: ""
         multiline: False
         on_text_validate: root.json_receipt_to_text(self)
+
+    Button:
+        on_press: root.json_receipt_to_text(text_input.text)
+        text: "Parse JSON"
 
 #    Label:
 #        id: text_input_label

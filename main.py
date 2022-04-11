@@ -40,17 +40,18 @@ class WidgetsExample(BoxLayout):
     # def on_text_validate(self, widget):
     #     self.ids.text_input_label.text = widget.text
 
-    def json_receipt_to_text(self, widget):
+    def json_receipt_to_text(self, uri):
         try:
-            with open(widget.text, "r", encoding="utf-8") as file:
+            with open(uri.replace('"', ''), "r", encoding="utf-8") as file:
                 json_receipt = json.load(file)
             text_receipt = f"{json_receipt['retailPlace']}\n" \
                            f"{json_receipt['localDateTime'].replace('T', ' ')}:00\n"
             for item in json_receipt["items"]:
                 text_receipt += f"{item['name']}  ({item['quantity']}) - {'{:.2f}'.format(item['sum'] * 0.01)}\n"
             text_receipt += f"{'{:.2f}'.format(json_receipt['totalSum'] * 0.01)} р."
-            widget.text = text_receipt
-        except:
+            self.ids.text_input.text = text_receipt
+        except Exception as e:
+            self.ids.text_input.text = str(e)
             pass
     # pass
     # def __init__(self, **kwargs):
@@ -71,6 +72,22 @@ class MainWidget(Widget):
 
 class TheLabApp(App):
     pass
+    # from jnius import autoclass
+    #
+    # # test for an intent passed to us
+    # PythonActivity = autoclass('org.renpy.android.PythonActivity')
+    # activity = PythonActivity.mActivity
+    # intent = activity.getIntent()
+    # intent_data = intent.getData()
+    # try:
+    #     file_uri = intent_data.toString()
+    #     WidgetsExample.json_receipt_to_text(file_uri)
+    # except AttributeError:
+    #     file_uri = None
 
 
 TheLabApp().run()
+
+
+
+
