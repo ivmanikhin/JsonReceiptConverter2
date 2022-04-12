@@ -1,13 +1,13 @@
 [app]
 
 # (str) Title of your application
-title = TestApp
+title = JsonReceiptConverter
 
 # (str) Package name
-package.name = testapp
+package.name = json_receipt_converter
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.ivmanikhin
+package.domain = org.test
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -22,7 +22,7 @@ source.include_exts = py,png,jpg,kv,atlas
 #source.exclude_exts = spec
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-source.exclude_dirs = tests, bin, venv
+#source.exclude_dirs = tests, bin, venv
 
 # (list) List of exclusions using pattern matching
 # Do not prefix with './'
@@ -50,7 +50,7 @@ requirements = python3,kivy
 #icon.filename = %(source.dir)s/data/icon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
-orientation = all
+orientation = portrait
 
 # (list) List of service to declare
 #services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
@@ -73,7 +73,7 @@ osx.kivy_version = 1.9.1
 #
 
 # (bool) Indicate if the application should be fullscreen or not
-fullscreen = 1
+fullscreen = 0
 
 # (string) Presplash background color (for android toolchain)
 # Supported formats are: #RRGGBB #AARRGGBB or one of the following names:
@@ -93,7 +93,7 @@ fullscreen = 1
 #icon.adaptive_background.filename = %(source.dir)s/data/icon_bg.png
 
 # (list) Permissions
-#android.permissions = INTERNET
+android.permissions = READ_EXTERNAL_STORAGE
 
 # (list) features (adds uses-feature -tags to manifest)
 #android.features = android.hardware.usb.host
@@ -222,7 +222,7 @@ fullscreen = 1
 #android.ouya.icon.filename = %(source.dir)s/data/ouya_icon.png
 
 # (str) XML file to include as an intent filters in <activity> tag
-#android.manifest.intent_filters =
+android.manifest.intent_filters = intents.xml
 
 # (str) launchMode to set for the main activity
 #android.manifest.launch_mode = standard

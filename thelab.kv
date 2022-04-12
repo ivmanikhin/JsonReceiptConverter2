@@ -3,67 +3,71 @@ WidgetsExample:
 <WidgetsExample>:
     padding: "5dp", "5dp", "5dp", "5dp"
     orientation: "vertical"
+#
+#    BoxLayout:
+#        spacing: "5dp"
+#        ToggleButton:
+#            id: toggle_button
+#            on_state: root.button_toggle(self)
+#            text: "Off"
+#            size_hint: None, 1
+#            width: "100dp"
+#
+#        Button:
+#            id: count_button
+#            on_press: root.button_change_label_text()
+#            text: "Click here"
+#            disabled: True
+#
+#        Label:
+#            id: counter_label
+#            text: str(root.count)
+#            font_size: "80dp"
+#
+#    BoxLayout:
+#        spacing: "5dp"
+#        Switch:
+#            id: switch
+#           # on_active: root.on_switch_active(self)
+#            size_hint: None, 1
+#            width: "100dp"
+#            active: True
+#
+#        Slider:
+#            id: slider
+#            on_value: root.on_slider_value(self)
+#            min: 0
+#            max: 100
+#            value: root.slider_value
+#            orientation: "vertical"
+#            disabled: not switch.active
+#
+#        BoxLayout:
+#            padding: 0, 0, "20dp", 0
+#            orientation: "vertical"
+#            Label:
+#                id: slider_label
+#                text: str(int(slider.value))
+#                font_size: "80dp"
+#            ProgressBar:
+#                value: slider.value
+#                min: slider.min
+#                max: slider.max
+#    BoxLayout:
+#        spacing: "5dp"
+#
+    TextInput:
+        id: text_input
+        text: ""
+        multiline: False
+        on_text_validate: root.json_receipt_to_text(self)
 
-    BoxLayout:
-        spacing: "5dp"
-        ToggleButton:
-            id: toggle_button
-            on_state: root.button_toggle(self)
-            text: "Off"
-            size_hint: None, 1
-            width: "100dp"
+    Button:
+        on_press: root.json_receipt_to_text(text_input.text)
+        text: "Parse JSON"
 
-        Button:
-            id: count_button
-            on_press: root.button_change_label_text()
-            text: "Click here"
-            disabled: True
-
-        Label:
-            id: counter_label
-            text: str(root.count)
-            font_size: "80dp"
-
-    BoxLayout:
-        spacing: "5dp"
-        Switch:
-            id: switch
-           # on_active: root.on_switch_active(self)
-            size_hint: None, 1
-            width: "100dp"
-            active: True
-
-        Slider:
-            id: slider
-            on_value: root.on_slider_value(self)
-            min: 0
-            max: 100
-            value: root.slider_value
-            orientation: "vertical"
-            disabled: not switch.active
-
-        BoxLayout:
-            padding: 0, 0, "20dp", 0
-            orientation: "vertical"
-            Label:
-                id: slider_label
-                text: str(int(slider.value))
-                font_size: "80dp"
-            ProgressBar:
-                value: slider.value
-                min: slider.min
-                max: slider.max
-    BoxLayout:
-        spacing: "5dp"
-
-        TextInput:
-            id: text_input
-            text: "Something"
-            multiline: False
-            on_text_validate: root.on_text_validate(self)
-
-        Label:
-            id: text_input_label
+#    Label:
+#        id: text_input_label
 
 
 
