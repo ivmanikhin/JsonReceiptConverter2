@@ -2,6 +2,8 @@ from functools import partial
 
 from kivy.app import App
 import json
+
+from kivy.core.clipboard import Clipboard
 from kivy.uix.button import Button
 # from kivy.properties import StringProperty
 
@@ -13,40 +15,44 @@ import os
 class MainWidget(ScrollView):
     dir_buttons = []
 
-    def json_receipt_to_text(self, uri, btn=None):
-        for dir_button in self.dir_buttons:
-            self.ids.main_layout.remove_widget(dir_button)
-        self.dir_buttons.clear()
+    def convert_json_to_text(self, uri, btn=None):
+        try:
+            with open(uri.replace('"', ''), "r", encoding="utf-8") as file:
+                json_receipt = json.load(file)
+            text_receipt = f"**{json_receipt['retailPlace']}**\n" \
+                           f"{json_receipt['localDateTime'].replace('T', ' ')}:00\n"
+            for item in json_receipt["items"]:
+                text_receipt += f"{item['name']}  ({item['quantity']}) - {'{:.2f}'.format(item['sum'] * 0.01)}\n"
+            text_receipt += f"**{'{:.2f}'.format(json_receipt['totalSum'] * 0.01)} р.**"
+            self.ids.converted_json.text = text_receipt
+            Clipboard.copy(text_receipt)
+        except Exception as e:
+            self.ids.converted_json.text = str(e)
+            pass
+
+    def act(self, uri, btn=None):
         if ".json" in uri:
-            print("FOUND JSON")
-            try:
-                with open(uri.replace('"', ''), "r", encoding="utf-8") as file:
-                    json_receipt = json.load(file)
-                text_receipt = f"{json_receipt['retailPlace']}\n" \
-                               f"{json_receipt['localDateTime'].replace('T', ' ')}:00\n"
-                for item in json_receipt["items"]:
-                    text_receipt += f"{item['name']}  ({item['quantity']}) - {'{:.2f}'.format(item['sum'] * 0.01)}\n"
-                text_receipt += f"{'{:.2f}'.format(json_receipt['totalSum'] * 0.01)} р."
-                self.ids.text_input.text = text_receipt
-            except Exception as e:
-                self.ids.text_input.text = str(e)
-                pass
+            # print("FOUND JSON")
+            self.convert_json_to_text(uri)
         else:
+            for dir_button in self.dir_buttons:
+                self.ids.main_layout.remove_widget(dir_button)
+            self.dir_buttons.clear()
             try:
-                dir_list = os.listdir(uri)
-                print(dir_list)
+                dir_list = sorted(os.listdir(uri))
+                # print(dir_list)
                 for _ in range(len(dir_list)):
-                    full_path = uri + "\\" + dir_list[_]
-                    print(full_path)
+                    full_path = uri + os.sep + dir_list[_]
+                    # print(full_path)
                     self.dir_buttons.append(Button(text=dir_list[_], size_hint=(1, None), height="40dp",
-                                                   halign='left',
-                                                   on_press=partial(self.json_receipt_to_text, full_path)))
+                                                   on_press=partial(self.act, full_path)))
                     self.ids.main_layout.add_widget(self.dir_buttons[_])
+                self.ids.text_input.text = uri
                 # for dir_button in self.dir_buttons:
                 #     dir_button.bind(on_press=partial(self.json_receipt_to_text, uri + "\\" + dir_button.text))
                 #     self.ids.main_layout.add_widget(dir_button)
             except Exception as e:
-                self.ids.text_input.text = str(e)
+                self.ids.converted_json.text = str(e)
                 pass
 
     # pass

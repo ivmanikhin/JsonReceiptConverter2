@@ -16,14 +16,20 @@ MainWidget:
         TextInput:
             id: text_input
             height: self.minimum_height
-            text: "F:\TEMP"
+            text: "/storage/emulated/0/_Receipts/"
+            size_hint: 1, None
+
+        TextInput:
+            id: converted_json
+            height: self.minimum_height
+            text: "none"
             size_hint: 1, None
 
         Button:
-            on_press: root.json_receipt_to_text(text_input.text)
+            on_press: root.act(text_input.text)
             size_hint: 1, None
             height: "40dp"
-            text: "Parse JSON"
+            text: "GO"
 
 
 
