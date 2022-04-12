@@ -34,6 +34,8 @@ class MainWidget(ScrollView):
         if ".json" in uri:
             # print("FOUND JSON")
             self.convert_json_to_text(uri)
+            if btn != None:
+                btn.background_color = "blue"
         else:
             for dir_button in self.dir_buttons:
                 self.ids.main_layout.remove_widget(dir_button)
