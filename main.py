@@ -1,6 +1,6 @@
 from kivy.app import App
 # from kivy.uix.button import Button
-from kivy.properties import StringProperty
+# from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.widget import Widget
