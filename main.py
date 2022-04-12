@@ -1,58 +1,54 @@
+from functools import partial
+
 from kivy.app import App
 import json
-# from kivy.uix.button import Button
+from kivy.uix.button import Button
 # from kivy.properties import StringProperty
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
+
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.widget import Widget
+import os
 
 
+class MainWidget(ScrollView):
+    dir_buttons = []
 
+    def json_receipt_to_text(self, uri, btn=None):
+        for dir_button in self.dir_buttons:
+            self.ids.main_layout.remove_widget(dir_button)
+        self.dir_buttons.clear()
+        if ".json" in uri:
+            print("FOUND JSON")
+            try:
+                with open(uri.replace('"', ''), "r", encoding="utf-8") as file:
+                    json_receipt = json.load(file)
+                text_receipt = f"{json_receipt['retailPlace']}\n" \
+                               f"{json_receipt['localDateTime'].replace('T', ' ')}:00\n"
+                for item in json_receipt["items"]:
+                    text_receipt += f"{item['name']}  ({item['quantity']}) - {'{:.2f}'.format(item['sum'] * 0.01)}\n"
+                text_receipt += f"{'{:.2f}'.format(json_receipt['totalSum'] * 0.01)} р."
+                self.ids.text_input.text = text_receipt
+            except Exception as e:
+                self.ids.text_input.text = str(e)
+                pass
+        else:
+            try:
+                dir_list = os.listdir(uri)
+                print(dir_list)
+                for _ in range(len(dir_list)):
+                    full_path = uri + "\\" + dir_list[_]
+                    print(full_path)
+                    self.dir_buttons.append(Button(text=dir_list[_], size_hint=(1, None), height="40dp",
+                                                   halign='left',
+                                                   on_press=partial(self.json_receipt_to_text, full_path)))
+                    self.ids.main_layout.add_widget(self.dir_buttons[_])
+                # for dir_button in self.dir_buttons:
+                #     dir_button.bind(on_press=partial(self.json_receipt_to_text, uri + "\\" + dir_button.text))
+                #     self.ids.main_layout.add_widget(dir_button)
+            except Exception as e:
+                self.ids.text_input.text = str(e)
+                pass
 
-
-class WidgetsExample(BoxLayout):
-    # count = 0
-    # slider_value = 50
-    # # count_label_text = StringProperty(str(count))
-    # # slider_value_text = StringProperty(str(slider_value))
-    # # toggle_button_state = StringProperty("Off")
-    #
-    # def button_toggle(self, widget):
-    #     if widget.state == "down":
-    #         widget.text = "On"
-    #         self.ids.count_button.disabled = False
-    #     else:
-    #         widget.text = "Off"
-    #         self.ids.count_button.disabled = True
-    #
-    # def button_change_label_text(self):
-    #     self.count += 1
-    #     self.ids.counter_label.text = str(self.count)
-    #
-    # # def on_switch_active(self, widget):
-    # #     self.ids.slider.disabled = not widget.active
-    # #     print("Switch " + ("On" if widget.active else "Off"))
-    #
-    # def on_slider_value(self, widget):
-    #     self.slider_value = int(widget.value)
-    #     # self.slider_value_text = str(self.slider_value)
-    #     # self.ids.slider_label.text = str(self.slider_value)
-    # def on_text_validate(self, widget):
-    #     self.ids.text_input_label.text = widget.text
-
-    def json_receipt_to_text(self, uri):
-        try:
-            with open(uri.replace('"', ''), "r", encoding="utf-8") as file:
-                json_receipt = json.load(file)
-            text_receipt = f"{json_receipt['retailPlace']}\n" \
-                           f"{json_receipt['localDateTime'].replace('T', ' ')}:00\n"
-            for item in json_receipt["items"]:
-                text_receipt += f"{item['name']}  ({item['quantity']}) - {'{:.2f}'.format(item['sum'] * 0.01)}\n"
-            text_receipt += f"{'{:.2f}'.format(json_receipt['totalSum'] * 0.01)} р."
-            self.ids.text_input.text = text_receipt
-        except Exception as e:
-            self.ids.text_input.text = str(e)
-            pass
     # pass
     # def __init__(self, **kwargs):
     #     super().__init__(**kwargs)
@@ -70,7 +66,7 @@ class MainWidget(Widget):
     pass
 
 
-class TheLabApp(App):
+class JsonReceiptConverterApp(App):
     pass
     # from jnius import autoclass
     #
@@ -86,7 +82,7 @@ class TheLabApp(App):
     #     file_uri = None
 
 
-TheLabApp().run()
+JsonReceiptConverterApp().run()
 
 
 
