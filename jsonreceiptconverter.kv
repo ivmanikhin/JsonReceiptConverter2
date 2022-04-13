@@ -15,10 +15,12 @@ MainWidget:
 
         TextInput:
             id: text_input
+            on_text_validate: root.act(self.text)
             height: self.minimum_height
            # text: "F:\AndroidProjects"
             text: "/storage/emulated/0/_Receipts/"
             size_hint: 1, None
+            multiline: False
 
         TextInput:
             id: converted_json
