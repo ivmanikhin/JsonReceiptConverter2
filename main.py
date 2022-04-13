@@ -17,9 +17,10 @@ import os
 class MainWidget(ScrollView):
     dir_buttons = []
 
-    def convert_json_to_text(self, json_item, btn=None):
+    def convert_json_to_text(self, json_item, extra_zeros=True, btn=None):
         text_receipt = f"**{json_item['retailPlace']}**\n" \
-                       f"{json_item['localDateTime'].replace('T', ' ')}:00\n"
+                       f"{json_item['localDateTime'].replace('T', ' ')}:00\n" if extra_zeros else f"**{json_item['retailPlace']}**\n" \
+                                                                                                  f"{json_item['localDateTime'].replace('T', ' ')}\n"
         for item in json_item["items"]:
             text_receipt += f"{item['name']}  ({item['quantity']}) - {'{:.2f}'.format(item['sum'] * 0.01)}\n"
         text_receipt += f"**{'{:.2f}'.format(json_item['totalSum'] * 0.01)} р.**"
@@ -35,7 +36,7 @@ class MainWidget(ScrollView):
         try:
             if not "ticket" in raw_json[0].keys():
                 for _ in range(len(raw_json)):
-                    self.dir_buttons.append(Button(text=raw_json[_]['localDateTime'].replace('T', ' ') + "\n" + raw_json[_]['retailPlace'] + "\n" + '{:.2f}'.format(raw_json[_]['totalSum'] * 0.01) + " р.",
+                    self.dir_buttons.append(Button(text=raw_json[_]['localDateTime'].replace('T', ' ') + ":00\n" + raw_json[_]['retailPlace'] + "\n" + '{:.2f}'.format(raw_json[_]['totalSum'] * 0.01) + " р.",
                                                    size_hint=(1, None), height="80dp", split_str="True", text_size=(Window.width - dp(20), None),
                                                    on_press=partial(self.convert_json_to_text, raw_json[_])))
                     self.ids.main_layout.add_widget(self.dir_buttons[_])
@@ -47,7 +48,7 @@ class MainWidget(ScrollView):
                     json_item['localDateTime'] = json_item['dateTime']
                     self.dir_buttons.append(Button(text=json_item['localDateTime'].replace('T', ' ') + "\n" + json_item['retailPlace'] + "\n" + '{:.2f}'.format(json_item['totalSum'] * 0.01) + " р.",
                                                    size_hint=(1, None), height="80dp", split_str="True", text_size=(Window.width - dp(20), None),
-                                                   on_press=partial(self.convert_json_to_text, json_item)))
+                                                   on_press=partial(self.convert_json_to_text, json_item, False)))
                     self.ids.main_layout.add_widget(self.dir_buttons[_])
         except Exception as e:
             self.ids.converted_json.text = str(e)
