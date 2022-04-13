@@ -22,6 +22,12 @@ MainWidget:
             size_hint: 1, None
             multiline: False
 
+        Button:
+            on_press: root.act(text_input.text)
+            size_hint: 1, None
+            height: "40dp"
+            text: "GO"
+
         TextInput:
             id: converted_json
             height: self.minimum_height
@@ -29,10 +35,10 @@ MainWidget:
             size_hint: 1, None
 
         Button:
-            on_press: root.act(text_input.text)
+            on_press: root.share(converted_json.text)
             size_hint: 1, None
             height: "40dp"
-            text: "GO"
+            text: "Share"
 
 
 

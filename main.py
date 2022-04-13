@@ -8,14 +8,30 @@ from kivy.core.window import Window
 from kivy.metrics import dp
 from kivy.uix.button import Button
 # from kivy.properties import StringProperty
-
 from kivy.uix.scrollview import ScrollView
-from kivy.uix.widget import Widget
 import os
+from jnius import autoclass
+
+
+
+PythonActivity = autoclass('org.kivy.android.PythonActivity')
+Intent = autoclass('android.content.Intent')
+String = autoclass('java.lang.String')
+
+StrictMode = autoclass('android.os.StrictMode')
+
 
 
 class MainWidget(ScrollView):
     dir_buttons = []
+
+    def share(self, message):
+        intent = Intent()
+        intent.setAction(Intent.ACTION_SEND)
+        intent.putExtra(Intent.EXTRA_TEXT, String(message))
+        intent.setType('text/plain')
+        chooser = Intent.createChooser(intent, String('Share...'))
+        PythonActivity.mActivity.startActivity(chooser)
 
     def convert_json_to_text(self, json_item, extra_zeros=True, btn=None):
         text_receipt = f"**{json_item['retailPlace']}**\n" \
@@ -100,9 +116,24 @@ class MainWidget(ScrollView):
 
 
 class JsonReceiptConverterApp(App):
-    pass
+    def build(self):
+        activity = PythonActivity.mActivity
+        intent = activity.getIntent()
+        intent_data = intent.getData()
+        try:
+            uri = intent_data.toString()
+            MainWidget.read_json(uri)
+        except Exception as e:
+            MainWidget.ids.converted_json.text = str(e)
+            pass
 
 
+
+
+
+
+
+# MainWidget.get_intent()
 JsonReceiptConverterApp().run()
 
 
