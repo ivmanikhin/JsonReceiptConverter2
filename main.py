@@ -54,7 +54,7 @@ class MainWidget(ScrollView):
                 for _ in range(len(raw_json)):
                     self.dir_buttons.append(Button(text=raw_json[_]['localDateTime'].replace('T', ' ') + ":00\n" + raw_json[_]['retailPlace'] + "\n" + '{:.2f}'.format(raw_json[_]['totalSum'] * 0.01) + " р.",
                                                    size_hint=(1, None), height="80dp", split_str="True", text_size=(Window.width - dp(20), None),
-                                                   on_press=partial(self.convert_json_to_text, raw_json[_])))
+                                                   on_press=partial(self.convert_json_to_text, raw_json[_], True)))
                     self.ids.main_layout.add_widget(self.dir_buttons[_])
             else:
                 # print("Ticket length: " + str(len(raw_json)))
@@ -116,24 +116,19 @@ class MainWidget(ScrollView):
 
 
 class JsonReceiptConverterApp(App):
-    def build(self):
-        activity = PythonActivity.mActivity
-        intent = activity.getIntent()
-        intent_data = intent.getData()
-        try:
-            uri = intent_data.toString()
-            MainWidget.read_json(uri)
-        except Exception as e:
-            MainWidget.ids.converted_json.text = str(e)
-            pass
+    pass
+    # def build(self):
+    #     activity = PythonActivity.mActivity
+    #     intent = activity.getIntent()
+    #     intent_data = intent.getData()
+    #     try:
+    #         uri = intent_data.toString()
+    #         MainWidget.read_json(uri)
+    #     except Exception as e:
+    #         MainWidget.ids.converted_json.text = str(e)
+    #         pass
 
 
-
-
-
-
-
-# MainWidget.get_intent()
 JsonReceiptConverterApp().run()
 
 
